@@ -1,6 +1,7 @@
 import numpy as np
 line = np.zeros((9, 9), dtype=np.int )
-linesus = np.zeros((9, 9, 9), dtype=np.int)     
+linesus = np.zeros((9, 9, 9), dtype=np.int)   
+print("please input unsolved sudoku.")
 for i in range(9):
     line[i] = input().split(" ")
     
