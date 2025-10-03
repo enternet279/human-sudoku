@@ -52,9 +52,9 @@ def solveit():
                     print(x,y,wow+1)
                     print("by 1")
                     return
-
     flag= False
     # now look at each number as f
+    yz_failed_records={}
     for f in range(9):
         if flag:
             break
@@ -117,7 +117,7 @@ def solveit():
                 print(yaax,yaay,f+1)
                 print("by 4")
                 flag = True
-        """Tips 5: If in a big block, a number can only be in one row or one column, then it can't be in that row or column in other big blocks."""
+        """Tips 5: Pointing pairs - If in a big block, a number can only be in one row or one column, then it can't be in that row or column in other big blocks."""
         for o in [0,3,6]:
             if flag:
                 break
@@ -180,153 +180,7 @@ def solveit():
                                     if linesus[bb][recy][f]==0:
                                         linesus[bb][recy][f]=f+1
                                         #print(bb,recy,f)
-        """Tips 6: If in a 'row or column', a number can only be in one big block, then it can't be in that big block in other rows or columns."""
-        superbreak2=False
-        for ab in range(9):
-            if superbreak2:
-                break
-            cflag =False
-            thflag=False
-            lol=0
-            where=0
-            for acc in [0,1,2]:
-                if thflag:
-                    break
-                if line[ab][acc]==0:
-                    if linesus[ab][acc][f]==0:
-                        lol+=1
-                        if lol>1:
-                            thflag=True
-                            where+=1
-            lol=0
-            if not thflag:
-                for acc in [3,4,5]:
-                    if thflag:
-                        break
-                    if line[ab][acc]==0:
-                        if linesus[ab][acc][f]==0:
-                            lol+=1
-                            if lol>1:
-                                thflag=True
-                                where+=1
-            lol=0
-            if not thflag:
-                for acc in [6,7,8]:
-                    if thflag:
-                        break
-                    if line[ab][acc]==0:
-                        if linesus[ab][acc][f]==0:
-                            lol+=1
-                            if lol>1:
-                                thflag=True
-                                where+=1
-            if where==1:
-                if acc<=2:
-                    nowy=0
-                elif acc<=5:
-                    nowy=3
-                else :
-                    nowy=6
-                if ab<=2:
-                    nowx=0
-                elif ab<=5:
-                    nowx=3
-                else :
-                    nowx=6
-                this = list(set([0,3,6]).difference(set([nowy])))
-                for ad in this:
-                    if cflag:
-                        break
-                    for ae in [ad,ad+1,ad+2]:
-                        if cflag:
-                            break
-                        if line[ab][ae]==0:
-                            if linesus[ab][ae][f]==0:
-                                cflag=True
-                if not cflag:
-                    this = list(set([nowx,nowx+1,nowx+2]).difference(set([ab])))
-                    for ag in this:
-                        for af in [nowy,nowy+1,nowy+2]:
-                            if line[ag][af]==0:
-                                if linesus[ag][af][f]==0:
-                                    linesus[ag][af][f]=f+1
-                                    #print(ag,af,f+1)
 
-                superbreak2=True
-        """Tips 7: If in a 'row or column', a number can only be in one big block, then it can't be in that big block in other rows or columns."""
-        superbreak=False
-        for ah in range(9):
-            if superbreak2:
-                break
-            if superbreak:
-                break
-            tyflag=False
-            dflag =False
-            rot=0
-            there=0
-            for aii in [0,1,2]:
-                if tyflag:
-                    break
-                if line[aii][ah]==0:
-                    if linesus[aii][ah][f]==0:
-                        rot+=1
-                        if rot>1:
-                            tyflag=True
-                            there+=1
-            rot=0
-            if not tyflag:
-                for aii in [3,4,5]:
-                    if tyflag:
-                        break
-                    if line[aii][ah]==0:
-                        if linesus[aii][ah][f]==0:
-                            rot+=1
-                            if rot>1:
-                                tyflag=True
-                                there+=1
-            rot=0
-            if not tyflag:
-                for aii in [6,7,8]:
-                    if tyflag:
-                        break
-                    if line[aii][ah]==0:
-                        if linesus[aii][ah][f]==0:
-                            rot+=1
-                            if rot>1:
-                                tyflag=True
-                                there+=1
-            if there==1:
-                if aii<=2:
-                    nowx=0
-                elif aii<=5:
-                    nowx=3
-                else :
-                    nowx=6
-                if ah<=2:
-                    nowy=0
-                elif ah<=5:
-                    nowy=3
-                else :
-                    nowy=6
-                this = list(set([0,3,6]).difference(set([nowx])))
-                for aj in this:
-                    if dflag:
-                        break
-                    for ak in [aj,aj+1,aj+2]:
-                        if dflag:
-                            break
-                        if line[ak][ah]==0:
-                            if linesus[ak][ah][f]==0:
-                                dflag=True
-                if not dflag:
-                    this = list(set([nowy,nowy+1,nowy+2]).difference(set([ah])))
-                    for al in this:
-                        for am in [nowx,nowx+1,nowx+2]:
-                            if line[am][al]==0:
-                                if linesus[am][al][f]==0:
-                                    linesus[am][al][f]=f+1
-                                    #print(am,al,f)
-                superbreak=True
         """Tips 8: blocks removal - if in a column, a number can only be in one big block, then it can't be in that big block in other rows."""
         superbreak3 = False
         for an in range(9):             
@@ -425,21 +279,282 @@ def solveit():
                                     linesus[k][an][num1 - 1] = num1
                                 if linesus[k][an][num2 - 1] == 0:
                                     linesus[k][an][num2 - 1] = num2
+        """Tips 12: Hidden pairs - if in a row, two numbers can only be in the same two cells, then all other numbers can be removed from those two cells."""
+        for an in range(9):
+            position_map = {}
+            for i in range(9):
+                if line[an][i] == 0:
+                    for num in range(9):
+                        if linesus[an][i][num] == 0:
+                            if num + 1 not in position_map:
+                                position_map[num + 1] = []
+                            position_map[num + 1].append(i)
+            pairs = [(num, positions) for num, positions in position_map.items() if len(positions) == 2]
+            for idx1 in range(len(pairs)):
+                for idx2 in range(idx1 + 1, len(pairs)):
+                    if pairs[idx1][1] == pairs[idx2][1]:
+                        num1, num2 = pairs[idx1][0], pairs[idx2][0]
+                        for pos in pairs[idx1][1]:
+                            for other_num in range(1, 10):
+                                if other_num != num1 and other_num != num2 and linesus[an][pos][other_num - 1] == 0:
+                                    linesus[an][pos][other_num - 1] = other_num
+        """Tips 13: Hidden pairs - if in a column, two numbers can only be in the same two cells, then all other numbers can be removed from those two cells."""
+        for an in range(9):
+            position_map = {}
+            for i in range(9):
+                if line[i][an] == 0:
+                    for num in range(9):
+                        if linesus[i][an][num] == 0:
+                            if num + 1 not in position_map:
+                                position_map[num + 1] = []
+                            position_map[num + 1].append(i)
+            pairs = [(num, positions) for num, positions in position_map.items() if len(positions) == 2]
+            for idx1 in range(len(pairs)):
+                for idx2 in range(idx1 + 1, len(pairs)):
+                    if pairs[idx1][1] == pairs[idx2][1]:
+                        num1, num2 = pairs[idx1][0], pairs[idx2][0]
+                        for pos in pairs[idx1][1]:
+                            for other_num in range(1, 10):
+                                if other_num != num1 and other_num != num2 and linesus[pos][an][other_num - 1] == 0:
+                                    linesus[pos][an][other_num - 1] = other_num
+        """Tips 14: Naked triples - if in a row, three cells can only be the same three numbers, then those three numbers can be removed from other cells in that row."""
+        for an in range(9):
+            triple_positions = []
+            for i in range(9):
+                if line[an][i] == 0:
+                    possible_numbers = [num + 1 for num in range(9) if linesus[an][i][num] == 0]
+                    if 2 <= len(possible_numbers) <= 3:
+                        triple_positions.append((i, possible_numbers))
+            for idx1 in range(len(triple_positions)):
+                for idx2 in range(idx1 + 1, len(triple_positions)):
+                    for idx3 in range(idx2 + 1, len(triple_positions)):
+                        combined = set(triple_positions[idx1][1] + triple_positions[idx2][1] + triple_positions[idx3][1])
+                        if len(combined) == 3:
+                            num1, num2, num3 = combined
+                            for k in range(9):
+                                if k not in [triple_positions[idx1][0], triple_positions[idx2][0], triple_positions[idx3][0]] and line[an][k] == 0:
+                                    if linesus[an][k][num1 - 1] == 0:
+                                        linesus[an][k][num1 - 1] = num1
+                                    if linesus[an][k][num2 - 1] == 0:
+                                        linesus[an][k][num2 - 1] = num2
+                                    if linesus[an][k][num3 - 1] == 0:
+                                        linesus[an][k][num3 - 1] = num3
+        """Tips 15: Naked triples - if in a column, three cells can only be the same three numbers, then those three numbers can be removed from other cells in that column."""
+        for an in range(9):
+            triple_positions = []
+            for i in range(9):
+                if line[i][an] == 0:
+                    possible_numbers = [num + 1 for num in range(9) if linesus[i][an][num] == 0]
+                    if 2 <= len(possible_numbers) <= 3:
+                        triple_positions.append((i, possible_numbers))
+            for idx1 in range(len(triple_positions)):
+                for idx2 in range(idx1 + 1, len(triple_positions)):
+                    for idx3 in range(idx2 + 1, len(triple_positions)):
+                        combined = set(triple_positions[idx1][1] + triple_positions[idx2][1] + triple_positions[idx3][1])
+                        if len(combined) == 3:
+                            num1, num2, num3 = combined
+                            for k in range(9):
+                                if k not in [triple_positions[idx1][0], triple_positions[idx2][0], triple_positions[idx3][0]] and line[an][k] == 0:
+                                    if linesus[k][an][num1 - 1] == 0:
+                                        linesus[k][an][num1 - 1] = num1
+                                    if linesus[k][an][num2 - 1] == 0:
+                                        linesus[k][an][num2 - 1] = num2
+                                    if linesus[k][an][num3 - 1] == 0:
+                                        linesus[k][an][num3 - 1] = num3
+        """Tips 16: Hidden triples - if in a row, three numbers can only be in the same three cells, then all other numbers can be removed from those three cells."""
+        for an in range(9):
+            position_map = {}
+            for i in range(9):
+                if line[an][i] == 0:
+                    for num in range(9):
+                        if linesus[an][i][num] == 0:
+                            if num + 1 not in position_map:
+                                position_map[num + 1] = []
+                            position_map[num + 1].append(i)
+            triples = [(num, positions) for num, positions in position_map.items() if len(positions) == 3]
+            for idx1 in range(len(triples)):
+                for idx2 in range(idx1 + 1, len(triples)):
+                    for idx3 in range(idx2 + 1, len(triples)):
+                        combined = set(triples[idx1][1] + triples[idx2][1] + triples[idx3][1])
+                        if len(combined) == 3:
+                            num1, num2, num3 = triples[idx1][0], triples[idx2][0], triples[idx3][0]
+                            for pos in combined:
+                                for other_num in range(1, 10):
+                                    if other_num != num1 and other_num != num2 and other_num != num3 and linesus[an][pos][other_num - 1] == 0:
+                                        linesus[an][pos][other_num - 1] = other_num
+        """Tips 17: Hidden triples - if in a column, three numbers can only be in the same three cells, then all other numbers can be removed from those three cells."""
+        for an in range(9):
+            position_map = {}
+            for i in range(9):
+                if line[i][an] == 0:
+                    for num in range(9):
+                        if linesus[i][an][num] == 0:
+                            if num + 1 not in position_map:
+                                position_map[num + 1] = []
+                            position_map[num + 1].append(i)
+            triples = [(num, positions) for num, positions in position_map.items() if len(positions) == 3]
+            for idx1 in range(len(triples)):
+                for idx2 in range(idx1 + 1, len(triples)):
+                    for idx3 in range(idx2 + 1, len(triples)):
+                        combined = set(triples[idx1][1] + triples[idx2][1] + triples[idx3][1])
+                        if len(combined) == 3:
+                            num1, num2, num3 = triples[idx1][0], triples[idx2][0], triples[idx3][0]
+                            for pos in combined:
+                                for other_num in range(1, 10):
+                                    if other_num != num1 and other_num != num2 and other_num != num3 and linesus[an][pos][other_num - 1] == 0:
+                                        linesus[pos][an][other_num - 1] = other_num
+        """Tips 18 xy wing - if a cell can put xy, and sees two cells in different ways that can put xz and yz, then z can be removed from any cell that sees both those cells."""
+        # to avoid repeated failed attempts, we record the failed xz locations(upon confirming yz) for each xy, ex:{(xy_i, xy_j):[(xz_i1, xz_j1), (xz_i2, xz_j2)]}
+        for an in range(9):
+            for i in range(9):
+                if line[an][i] == 0:
+                    possible_numbers = [num + 1 for num in range(9) if linesus[an][i][num] == 0]
+                    if len(possible_numbers) == 2:
+                        x, y = possible_numbers
+                        z= None
+                        xz_locations = []
+                        #print("found xy at", an, i, ":", x, y)
+                        #look for same block first, then row, then column. if found xz and yz that meet the condition, do it and return
+                        flag_first_found = False
+                        for j in range(an//3*3, an//3*3+3):
+                            if flag_first_found:
+                                break
+                            for k in range(i//3*3, i//3*3+3):
+                                #print("yz_failed_records:", yz_failed_records)
+                                if (j == an and k == i) or line[j][k] != 0:
+                                    continue
+                                if (an, i) in yz_failed_records and (j, k) in yz_failed_records[(an, i)]:
+                                    #print("skipped", (j, k), "for", (an, i))
+                                    continue
+                                if flag_first_found:
+                                    break
+                                possible_numbers_jk = [num + 1 for num in range(9) if linesus[j][k][num] == 0]
+                                if len(possible_numbers_jk) == 2:
+                                    #check if they share one number with (x,y), also need to be different row and column to (an,i)
+                                    if ((x in possible_numbers_jk) != (y in possible_numbers_jk)) and (j != an) and (k != i):
+                                        z = possible_numbers_jk[0] if possible_numbers_jk[0] not in (x, y) else possible_numbers_jk[1]
+                                        #print("cell found xz at", j, k, ":", possible_numbers_jk)
+                                        xz_locations.append((j, k))
+                                        flag_first_found = True
+                                        #print("z is", z)
+                                        #now redefine xy if neeeded
+                                        if x in possible_numbers_jk:
+                                            x = x
+                                            y = y
+                                        else:
+                                            x, y = y, x
+                        #look in the same row
+                        for j in range(9):
+                            if (j == i) or line[an][j] != 0:
+                                continue
+                            possible_numbers_j = [num + 1 for num in range(9) if linesus[an][j][num] == 0]
+                            #need check if possicle numbers j lenth is 2, and 
+                            if len(possible_numbers_j) == 2:
+                                if flag_first_found:
+                                    #print([an ,j],[y,z], possible_numbers_j, x)
+                                    if possible_numbers_j == [z, y] or possible_numbers_j == [y, z]:
+                                        #print("really checked, last chance",x, y, possible_numbers_j, z)
+                                        #print(flag_first_found, xz_locations)
+                                        #print("found yz at", an, j, ":", possible_numbers_j)
+                                        #remove z from any cell that sees both (an,j) and xz_locations, including seeing by same line or in sanme block
+                                        for thex in range(9):
+                                            for they in range(9):
+                                                #bypass the cell that is xz or yz itself
+                                                if (thex == an and they == j) or any(thex == xz_i and they == xz_j for (xz_i, xz_j) in xz_locations):
+                                                    continue
+                                                #if:  (the cell is in xz's block ,or in same row as xz, or in same column as xz) and (the cell is in yz's block ,or in same row as yz, or in same column as yz) and (is not xz or yz)
+                                                for (xz_i, xz_j) in xz_locations:
+                                                    if line[thex][they] == 0 and linesus[thex][they][z-1] == 0:
+                                                        in_xz_block = (thex // 3 == xz_i // 3) and (they // 3 == xz_j // 3)
+                                                        in_yz_block = (thex // 3 == an // 3) and (they // 3 == j // 3)
+                                                        same_row_as_xz = (thex == xz_i)
+                                                        same_col_as_xz = (they == xz_j)
+                                                        same_row_as_yz = (thex == an)
+                                                        same_col_as_yz = (they == j)
+                                                        if (in_xz_block or same_row_as_xz or same_col_as_xz) and (in_yz_block or same_row_as_yz or same_col_as_yz):
+                                                            linesus[thex][they][z-1] = z
+                                                            print("removed", z, "from", thex, they)
+                                                            print("xy suspect is", an, i, ":", x, y)
+                                                            print("xz suspect is", xz_i, xz_j, ":", x, z)
+                                                            print("yz suspect is", an, j, ":", y, z)
+                                                            return
+                                    else:
+                                        if (an, i) not in yz_failed_records:
+                                            yz_failed_records[(an, i)] = []
+                                        yz_failed_records[(an, i)].append(xz_locations[0])
+                                        #print(yz_failed_records)
+
+                                if not flag_first_found:
+                                    if (x in possible_numbers_j) != (y in possible_numbers_j):
+                                        if (an ,i) in yz_failed_records and (an, j) in yz_failed_records[(an ,i)]:
+                                            #print("skipped", (an, j), "for", (an, i))
+                                            continue
+                                        z = possible_numbers_j[0] if possible_numbers_j[0] not in (x, y) else possible_numbers_j[1]
+                                        #print("found xz at", an, j, ":", possible_numbers_j)
+                                        xz_locations.append((an, j))
+                                        #print("z is", z)
+                                        #print("x is", x, "y is", y)
+                                        flag_first_found = True
+                                        #now redefine xy if neeeded
+                                        if x in possible_numbers_j:
+                                            x = x
+                                            y = y
+                                        else:
+                                            x, y = y, x
+                                        break
+                        #look in the same column
+                        for j in range(9):
+                            if (j == an) or line[j][i] != 0:
+                                continue
+                            if not flag_first_found:
+                                break
+                            possible_numbers_j = [num + 1 for num in range(9) if linesus[j][i][num] == 0]
+                            if len(possible_numbers_j) == 2:
+                                if possible_numbers_j == [z,y] or possible_numbers_j == [y, z]:
+                                    #print("really checked, last chance",x, y, possible_numbers_j, z)
+                                    #print("found yz at", j, i, ":", possible_numbers_j)
+                                    #remove z from any cell that sees both (j,i) and xz_location, including seeing by same line or in sanme block
+                                    for thex in range(9):
+                                        for they in range(9):
+                                            #bypass the cell that is xz or yz itself
+                                            if (thex == j and they == i) or (thex == xz_locations[0][0] and they == xz_locations[0][1]):
+                                                continue
+
+                                            #if:  (the cell is in xz's block ,or in same row as xz, or in same column as xz) and (the cell is in yz's block ,or in same row as yz, or in same column as yz) and (is not xz or yz)
+                                            for (xz_i, xz_j) in xz_locations:
+                                                if line[thex][they] == 0 and linesus[thex][they][z-1] == 0:
+                                                    in_xz_block = (thex // 3 == xz_i // 3) and (they // 3 == xz_j // 3)
+                                                    in_yz_block = (thex // 3 == j // 3) and (they // 3 == i // 3)
+                                                    same_row_as_xz = (thex == xz_i)
+                                                    same_col_as_xz = (they == xz_j)
+                                                    same_row_as_yz = (thex == j)
+                                                    same_col_as_yz = (they == i)
+                                                    if (in_xz_block or same_row_as_xz or same_col_as_xz) and (in_yz_block or same_row_as_yz or same_col_as_yz):
+                                                        linesus[thex][they][z-1] = z
+                                                        print("removed", z, "from", thex, they)
+                                                        print("xy suspect is", an, i, ":", x, y)
+                                                        print("xz suspect is", xz_i, xz_j, ":", x, z)
+                                                        print("yz suspect is", j, i, ":", y, z)
+                                                        return    
+                                else:
+                                    if (an, i) not in yz_failed_records:
+                                        yz_failed_records[(an, i)] = []
+                                    yz_failed_records[(an, i)].append((j, i))
+                                    #print(yz_failed_records)
 solveit()
 OCOUNT=0
 while not line.all():
     solveit()
     OCOUNT+=1
     if OCOUNT%100 == 0:
-        #print(linesus[3,6])
-        #print(linesus[3,7])
-        #print(linesus[3,8])
-        linesus = np.zeros((9, 9, 9), dtype=int)
+        #linesus = np.zeros((9, 9, 9), dtype=int)
         print("dumb way")
-    if OCOUNT == 300:
-#        for i in range(9):
-#            for j in range(9):
-#                print(linesus[i][j])
+
+    if OCOUNT == 200:
+        #for i in range(9):
+            #for j in range(9):
+                #if line[i][j] == 0:
+                    #print(linesus[i][j])
         break
 
 print(line)
